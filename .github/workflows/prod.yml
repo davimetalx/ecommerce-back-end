@@ -10,3 +10,21 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build Project
+        run: mvn clean install -DskipTests
+
+      - name: Login Docker Hub
+        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+
+      - name: Build Docker Image
+        run: docker build -t davinascimentodasilva10/ecommerce-back-end .
+
+      - name: Push Image Docker
+        run: docker push davinascimentodasilva10/ecommerce-back-end
